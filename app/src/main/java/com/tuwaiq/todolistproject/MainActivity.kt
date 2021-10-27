@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.tuwaiq.todolistproject.model.UserData
 import com.tuwaiq.todolistproject.view.UserAdapter
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -23,27 +25,12 @@ class MainActivity : AppCompatActivity(){
     private lateinit var recv:RecyclerView
     private lateinit var userList: ArrayList<UserData>
     private lateinit var userAdapter: UserAdapter
-    private lateinit var backgroundImg: ImageView
-/*    private lateinit var enterTitle: EditText
-    private lateinit var enterDate: TextView*/
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-/*
-         backgroundImg =findViewById(R.id.iv_logo)
-         backgroundImg.startAnimation(AnimationUtils.loadAnimation(this,R.anim.slide))
-            Handler().postDelayed({
-                backgroundImg.visibility = View.GONE
-                finish()
-            }, 3000)*/
 
-
-/*        //set view
-        enterTitle= findViewById(R.id.txtTitle)
-        //date
-        enterDate = findViewById(R.id.txtDate)*/
 
         //set find id
         addBtn = findViewById(R.id.addingBtn)
@@ -59,6 +46,9 @@ class MainActivity : AppCompatActivity(){
         recv.layoutManager = LinearLayoutManager(this)
         recv.adapter = userAdapter
 
+        //creation date
+
+
         //set Dialog
         addBtn.setOnClickListener{ addInfo()}
     }
@@ -71,29 +61,42 @@ class MainActivity : AppCompatActivity(){
         //set view
         val enterTitle: EditText = v.findViewById(R.id.txtTitle)
         val enterDate: TextView = v.findViewById(R.id.txtDate)
+        val enterDescription :TextView = v.findViewById(R.id.txtDescribe)
+        val creationDate: EditText = v.findViewById(R.id.txtCreationDate)
+
+        //creation Date
+        val current = LocalDateTime.now()
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        val formatted = current.format(formatter)
+        creationDate.setText(formatted)
+
 
         //date button
-      //  val dateBtn :Button = v.findViewById(R.id.btnWhen)
         val c =  Calendar.getInstance()
         val day = c.get(Calendar.DAY_OF_MONTH)
         val month = c.get(Calendar.MONTH)
         val year = c.get(Calendar.YEAR)
         var date = ""
         enterDate.setOnClickListener{
-            DatePickerDialog(this,DatePickerDialog.OnDateSetListener{
+          val datePickerDialog = DatePickerDialog(this,DatePickerDialog.OnDateSetListener{
                     view, y, m, d ->
                 date = "$y/$m/$d"
                 enterDate.setText(date) },
-                year,month,day).show()
+                year,month,day)
+              datePickerDialog.datePicker.minDate = c.timeInMillis
+            datePickerDialog.show()
         }
+
         //dialog
         val addDialog = AlertDialog.Builder(this)
         addDialog.setView(v)
         addDialog.setPositiveButton("Ok") { dialog, _ ->
             val title = enterTitle.text.toString()
             val date = enterDate.text.toString()
+            val discr = enterDescription.text.toString()
+            val create = creationDate.text.toString()
             if (title.isNotBlank()){
-                userList.add(UserData(title, date))
+                userList.add(UserData(title, date,discr,create))
                 userAdapter.notifyDataSetChanged()
                 Toast.makeText(this, "Adding success", Toast.LENGTH_SHORT).show()
                 dialog.dismiss()

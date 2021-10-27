@@ -10,6 +10,8 @@ import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.tuwaiq.todolistproject.R
 import com.tuwaiq.todolistproject.model.UserData
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -22,10 +24,14 @@ class UserAdapter(val c:Context,val userList:ArrayList<UserData>):RecyclerView.A
         var title: TextView
         var date: TextView
         var mMenu:ImageView
+        var mDescribe: TextView
+        var creationDate:TextView
 
         init {
             title = v.findViewById(R.id.mTitle)
             date = v.findViewById(R.id.mSubTitle)
+            mDescribe = v.findViewById(R.id.mDescription)
+            creationDate = v.findViewById(R.id.txtCreate)
             mMenu = v.findViewById(R.id.mMenus)
             mMenu.setOnClickListener{popupMenus(it)}
         }
@@ -36,48 +42,57 @@ class UserAdapter(val c:Context,val userList:ArrayList<UserData>):RecyclerView.A
             val popupMenus = PopupMenu(c,v)
             popupMenus.inflate(R.menu.show_menu)
             popupMenus.setOnMenuItemClickListener {
-                when(it.itemId){
+                when (it.itemId) {
 
                     //set edit
                     R.id.editText ->{
                         val v = LayoutInflater.from(c).inflate(R.layout.add_item,null)
                         val title = v.findViewById<EditText>(R.id.txtTitle)
                         val enterDate = v.findViewById<TextView>(R.id.txtDate)
+                        val enterDiscription = v.findViewById<TextView>(R.id.txtDescribe)
+                        val creationday = v.findViewById<EditText>(R.id.txtCreationDate)
+
                         val c =  Calendar.getInstance()
                         val day = c.get(Calendar.DAY_OF_MONTH)
                         val month = c.get(Calendar.MONTH)
                         val year = c.get(Calendar.YEAR)
                         var date = ""
                         enterDate.setOnClickListener{
-                            DatePickerDialog(v.context, DatePickerDialog.OnDateSetListener{
+                            val datePickerDialog = DatePickerDialog(v.context,DatePickerDialog.OnDateSetListener{
                                     view, y, m, d ->
                                 date = "$y/$m/$d"
                                 enterDate.setText(date) },
-                                year,month,day).show()
+                                year,month,day)
+                            datePickerDialog.datePicker.minDate = c.timeInMillis
+                            datePickerDialog.show()
                         }
+                        //creation Date
+                        val current = LocalDateTime.now()
+                        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+                        val formatted = current.format(formatter)
+                        creationday.setText(formatted)
                             AlertDialog.Builder(v.context)
-                            .setView(v)
-                                .setPositiveButton("ok"){
-                                    dialog,_ ->
-                                    if(title.text.isNotBlank()){
-                                    position.txtTitle = title.text.toString()
-                                    position.txtDate = enterDate.text.toString()
-                                    notifyDataSetChanged()
-                                    Toast.makeText(v.context,"you editing the data", Toast.LENGTH_LONG).show()
-                                    dialog.dismiss()
-                                }else{
-                                        Toast.makeText(v.context,"Must add title", Toast.LENGTH_LONG).show()
-
-                                    }}
-                                .setNegativeButton("Cancel"){
-                                    dialog,_ ->
+                                .setView(v)
+                                .setPositiveButton("ok") { dialog, _ ->
+                                    if (title.text.isNotBlank()) {
+                                        position.txtTitle = title.text.toString()
+                                        position.txtDate = enterDate.text.toString()
+                                        position.txtDescribe = enterDiscription.text.toString()
+                                        position.creatDate = creationday.text.toString()
+                                        notifyDataSetChanged()
+                                        Toast.makeText(v.context, "you editing the data", Toast.LENGTH_LONG).show()
+                                        dialog.dismiss()
+                                    } else {
+                                        Toast.makeText(v.context, "Must add title", Toast.LENGTH_LONG).show()
+                                    }
+                                }
+                                .setNegativeButton("Cancel") { dialog, _ ->
                                     dialog.dismiss()
                                 }
                                 .create()
                                 .show()
                         true
                     }
-
                     //set delete
                     R.id.deleteText ->{
                         AlertDialog.Builder(c)
@@ -121,6 +136,8 @@ class UserAdapter(val c:Context,val userList:ArrayList<UserData>):RecyclerView.A
         val newList = userList[position]
         holder.title.text = newList.txtTitle
         holder.date.text = newList.txtDate
+        holder.creationDate.text = newList.creatDate
+        holder.mDescribe.text = newList.txtDescribe
     }
 
     override fun getItemCount(): Int {

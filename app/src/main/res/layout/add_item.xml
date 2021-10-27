@@ -63,6 +63,29 @@
             android:layout_marginRight="15dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
+        <EditText
+            android:id="@+id/txtDescribe"
+            android:hint="description"
+            android:padding="30dp"
+            android:background="@drawable/shape_background"
+            android:inputType="text"
+            android:textColor="@color/purple_500"
+            android:textSize="18dp"
+            android:textStyle="bold"
+            android:layout_marginRight="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginTop="10dp"
+            android:elevation="15dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+        <EditText
+            android:id="@+id/txtCreationDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="date"
+            android:layout_margin="15dp"
+            android:textSize="15dp"/>
 
 
     </LinearLayout>
