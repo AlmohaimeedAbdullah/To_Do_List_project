@@ -59,12 +59,16 @@ class UserAdapter(val c:Context,val userList:ArrayList<UserData>):RecyclerView.A
                             .setView(v)
                                 .setPositiveButton("ok"){
                                     dialog,_ ->
+                                    if(title.text.isNotBlank()){
                                     position.txtTitle = title.text.toString()
                                     position.txtDate = enterDate.text.toString()
                                     notifyDataSetChanged()
                                     Toast.makeText(v.context,"you editing the data", Toast.LENGTH_LONG).show()
                                     dialog.dismiss()
-                                }
+                                }else{
+                                        Toast.makeText(v.context,"Must add title", Toast.LENGTH_LONG).show()
+
+                                    }}
                                 .setNegativeButton("Cancel"){
                                     dialog,_ ->
                                     dialog.dismiss()

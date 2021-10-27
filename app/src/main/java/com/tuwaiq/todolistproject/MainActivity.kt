@@ -1,9 +1,13 @@
 package com.tuwaiq.todolistproject
 
 import android.app.DatePickerDialog
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.view.LayoutInflater
+import android.view.View
+import android.view.animation.AnimationUtils
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,16 +23,22 @@ class MainActivity : AppCompatActivity(){
     private lateinit var recv:RecyclerView
     private lateinit var userList: ArrayList<UserData>
     private lateinit var userAdapter: UserAdapter
+    private lateinit var backgroundImg: ImageView
 /*    private lateinit var enterTitle: EditText
     private lateinit var enterDate: TextView*/
-
-
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+/*
+         backgroundImg =findViewById(R.id.iv_logo)
+         backgroundImg.startAnimation(AnimationUtils.loadAnimation(this,R.anim.slide))
+            Handler().postDelayed({
+                backgroundImg.visibility = View.GONE
+                finish()
+            }, 3000)*/
+
 
 /*        //set view
         enterTitle= findViewById(R.id.txtTitle)
@@ -82,10 +92,14 @@ class MainActivity : AppCompatActivity(){
         addDialog.setPositiveButton("Ok") { dialog, _ ->
             val title = enterTitle.text.toString()
             val date = enterDate.text.toString()
-            userList.add(UserData(title, date))
-            userAdapter.notifyDataSetChanged()
-            Toast.makeText(this, "Adding success", Toast.LENGTH_SHORT).show()
-            dialog.dismiss()
+            if (title.isNotBlank()){
+                userList.add(UserData(title, date))
+                userAdapter.notifyDataSetChanged()
+                Toast.makeText(this, "Adding success", Toast.LENGTH_SHORT).show()
+                dialog.dismiss()
+            }else{
+                Toast.makeText(this, "Must add title", Toast.LENGTH_SHORT).show()
+            }
         }
         addDialog.setNegativeButton("Cancel") { dialog, _ ->
             dialog.dismiss()
