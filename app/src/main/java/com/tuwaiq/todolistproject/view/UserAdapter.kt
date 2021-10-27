@@ -1,6 +1,7 @@
 package com.tuwaiq.todolistproject.view
 
 import android.app.AlertDialog
+import android.app.DatePickerDialog
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +10,8 @@ import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.tuwaiq.todolistproject.R
 import com.tuwaiq.todolistproject.model.UserData
+import java.util.*
+import kotlin.collections.ArrayList
 
 class UserAdapter(val c:Context,val userList:ArrayList<UserData>):RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
 
@@ -39,15 +42,27 @@ class UserAdapter(val c:Context,val userList:ArrayList<UserData>):RecyclerView.A
                     R.id.editText ->{
                         val v = LayoutInflater.from(c).inflate(R.layout.add_item,null)
                         val title = v.findViewById<EditText>(R.id.txtTitle)
-                        val date = v.findViewById<EditText>(R.id.txtDate)
-                            AlertDialog.Builder(c)
+                        val enterDate = v.findViewById<TextView>(R.id.txtDate)
+                        val c =  Calendar.getInstance()
+                        val day = c.get(Calendar.DAY_OF_MONTH)
+                        val month = c.get(Calendar.MONTH)
+                        val year = c.get(Calendar.YEAR)
+                        var date = ""
+                        enterDate.setOnClickListener{
+                            DatePickerDialog(v.context, DatePickerDialog.OnDateSetListener{
+                                    view, y, m, d ->
+                                date = "$y/$m/$d"
+                                enterDate.setText(date) },
+                                year,month,day).show()
+                        }
+                            AlertDialog.Builder(v.context)
                             .setView(v)
                                 .setPositiveButton("ok"){
                                     dialog,_ ->
                                     position.txtTitle = title.text.toString()
-                                    position.txtDate = date.text.toString()
+                                    position.txtDate = enterDate.text.toString()
                                     notifyDataSetChanged()
-                                    Toast.makeText(c,"you editing the data", Toast.LENGTH_LONG).show()
+                                    Toast.makeText(v.context,"you editing the data", Toast.LENGTH_LONG).show()
                                     dialog.dismiss()
                                 }
                                 .setNegativeButton("Cancel"){
