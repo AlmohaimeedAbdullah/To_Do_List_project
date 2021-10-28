@@ -15,7 +15,7 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.ArrayList
 
-class UserAdapter(val c:Context,val userList:ArrayList<UserData>):RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
+class UserAdapter(val c:Context,val userList:MutableList<UserData>):RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
 
 
 
@@ -42,15 +42,22 @@ class UserAdapter(val c:Context,val userList:ArrayList<UserData>):RecyclerView.A
             val popupMenus = PopupMenu(c,v)
             popupMenus.inflate(R.menu.show_menu)
             popupMenus.setOnMenuItemClickListener {
+
+                val v = LayoutInflater.from(c).inflate(R.layout.add_item,null)
+                val title = v.findViewById<EditText>(R.id.txtTitle)
+                val enterDate = v.findViewById<TextView>(R.id.txtDate)
+                val enterDiscription = v.findViewById<TextView>(R.id.txtDescribe)
+                val creationday = v.findViewById<TextView>(R.id.txtCreationDate)
+                //current day
+                val current = LocalDateTime.now()
+                val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+                val formatted = current.format(formatter)
                 when (it.itemId) {
 
+
+                    //if(>=){
                     //set edit
                     R.id.editText ->{
-                        val v = LayoutInflater.from(c).inflate(R.layout.add_item,null)
-                        val title = v.findViewById<EditText>(R.id.txtTitle)
-                        val enterDate = v.findViewById<TextView>(R.id.txtDate)
-                        val enterDiscription = v.findViewById<TextView>(R.id.txtDescribe)
-                        val creationday = v.findViewById<EditText>(R.id.txtCreationDate)
 
                         val c =  Calendar.getInstance()
                         val day = c.get(Calendar.DAY_OF_MONTH)
@@ -67,10 +74,8 @@ class UserAdapter(val c:Context,val userList:ArrayList<UserData>):RecyclerView.A
                             datePickerDialog.show()
                         }
                         //creation Date
-                        val current = LocalDateTime.now()
-                        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-                        val formatted = current.format(formatter)
                         creationday.setText(formatted)
+
                             AlertDialog.Builder(v.context)
                                 .setView(v)
                                 .setPositiveButton("ok") { dialog, _ ->
