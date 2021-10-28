@@ -13,30 +13,26 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.tuwaiq.todolistproject.MainVM.ViewModle
 import com.tuwaiq.todolistproject.model.UserData
 import com.tuwaiq.todolistproject.view.UserAdapter
-import kotlinx.android.synthetic.main.add_item.*
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.math.min
 
 class MainActivity : AppCompatActivity(){
     private lateinit var addBtn:FloatingActionButton
     private lateinit var recv:RecyclerView
     private lateinit var userList: MutableList<UserData>
     private lateinit var userAdapter: UserAdapter
-
-
-    private lateinit var mUserViewModle: ViewModle
-
+    lateinit var mainVM: ViewModle
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        //user view modle
-        mUserViewModle =ViewModelProvider(this).get(ViewModle::class.java)
-        mUserViewModle
+        mainVM = ViewModelProvider(this).get(ViewModle::class.java)
+        loadScreen()
+
 
         //set find id
         addBtn = findViewById(R.id.addingBtn)
@@ -46,15 +42,21 @@ class MainActivity : AppCompatActivity(){
         userList = ArrayList()
 
         //set adapter
-        userAdapter = UserAdapter(this,userList)
+       // userAdapter = UserAdapter(this,userList)
 
         //set recycle view adapter
         recv.layoutManager = LinearLayoutManager(this)
-        recv.adapter = userAdapter
+        // recv.adapter = userAdapter
 
 
         //set Dialog
         addBtn.setOnClickListener{ addInfo()}
+    }
+
+    private fun loadScreen() {
+        mainVM.getAllUsers().observe(this, {
+            recv.adapter = UserAdapter(this, it as MutableList<UserData>)
+        })
     }
 
 
@@ -104,16 +106,18 @@ class MainActivity : AppCompatActivity(){
             val discr = enterDescription.text.toString()
             val create = creationDate.text.toString()
             if (title.isNotBlank()) {
-                userList.add(UserData(txtTitle = title,txtDate= date,txtDescribe = discr,creatDate = create))
-                userAdapter.notifyDataSetChanged()
-                Toast.makeText(this, "Adding success", Toast.LENGTH_SHORT).show()
+                //userList.add(UserData(txtTitle = title,txtDate= date,txtDescribe = discr,creatDate = create))
+                //userAdapter.notifyDataSetChanged()
+                val addTask =UserData(txtTitle = title,txtDate= date,txtDescribe = discr,creatDate = create)
+                mainVM.insertTask(addTask)
+                loadScreen()
+                    Toast.makeText(this, "Adding success", Toast.LENGTH_SHORT).show()
                 dialog.dismiss()
             } else {
                 Toast.makeText(this, "Must add title", Toast.LENGTH_SHORT).show()
             }
 
-            val addTask =UserData(txtTitle = title,txtDate= date,txtDescribe = discr,creatDate = create)
-            mainVM.insertTask(addTask)
+
 
         }
         addDialog.setNegativeButton("Cancel") { dialog, _ ->

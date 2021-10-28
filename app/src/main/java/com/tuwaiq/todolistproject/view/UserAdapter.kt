@@ -19,7 +19,7 @@ class UserAdapter(val c:Context,val userList:MutableList<UserData>):RecyclerView
 
 
 
-    inner class UserViewHolder(val v: View):RecyclerView.ViewHolder(v){
+    inner class UserViewHolder(v: View):RecyclerView.ViewHolder(v){
 
         var title: TextView
         var date: TextView
