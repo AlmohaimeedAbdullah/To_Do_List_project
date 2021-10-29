@@ -18,6 +18,11 @@ class AppRepo {
         suspend fun insertTask(userData: UserData) = appDB.userDao.insert(userData)
 
 
+        suspend fun deleteTask(userData: UserData) = appDB.userDao.delete(userData)
+
+        suspend fun updateTask(userData: UserData) = appDB.userDao.update(userData)
+
+
 
         }
     }

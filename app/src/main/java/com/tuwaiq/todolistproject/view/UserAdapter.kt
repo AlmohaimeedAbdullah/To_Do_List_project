@@ -7,25 +7,30 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
+import com.tuwaiq.todolistproject.MainActivity
+import com.tuwaiq.todolistproject.MainVM.ViewModle
 import com.tuwaiq.todolistproject.R
 import com.tuwaiq.todolistproject.model.UserData
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
-import kotlin.collections.ArrayList
 
-class UserAdapter(val c:Context,val userList:MutableList<UserData>):RecyclerView.Adapter<UserAdapter.UserViewHolder>() {
+class UserAdapter(val c:Context,val userList:MutableList<UserData>,
+                  val maiVM:ViewModle):RecyclerView.Adapter<UserAdapter.UserViewHolder>(){
 
 
 
     inner class UserViewHolder(v: View):RecyclerView.ViewHolder(v){
+
 
         var title: TextView
         var date: TextView
         var mMenu:ImageView
         var mDescribe: TextView
         var creationDate:TextView
+
 
         init {
             title = v.findViewById(R.id.mTitle)
@@ -36,9 +41,11 @@ class UserAdapter(val c:Context,val userList:MutableList<UserData>):RecyclerView
             mMenu.setOnClickListener{popupMenus(it)}
         }
 
+
         //menu -edit and delete-
         private fun popupMenus(v:View) {
-            val position = userList[adapterPosition]
+
+                val position = userList[adapterPosition]
             val popupMenus = PopupMenu(c,v)
             popupMenus.inflate(R.menu.show_menu)
             popupMenus.setOnMenuItemClickListener {
@@ -48,6 +55,7 @@ class UserAdapter(val c:Context,val userList:MutableList<UserData>):RecyclerView
                 val enterDate = v.findViewById<TextView>(R.id.txtDate)
                 val enterDiscription = v.findViewById<TextView>(R.id.txtDescribe)
                 val creationday = v.findViewById<TextView>(R.id.txtCreationDate)
+
                 //current day
                 val current = LocalDateTime.now()
                 val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
@@ -80,10 +88,13 @@ class UserAdapter(val c:Context,val userList:MutableList<UserData>):RecyclerView
                                 .setView(v)
                                 .setPositiveButton("ok") { dialog, _ ->
                                     if (title.text.isNotBlank()) {
-                                        position.txtTitle = title.text.toString()
-                                        position.txtDate = enterDate.text.toString()
-                                        position.txtDescribe = enterDiscription.text.toString()
-                                        position.creatDate = creationday.text.toString()
+                                        position.taskTitle = title.text.toString()
+                                        position.taskDate = enterDate.text.toString()
+                                        position.taskDescribe = enterDiscription.text.toString()
+                                        position.taskCreatDate = creationday.text.toString()
+
+                                        maiVM.updateTask(position)
+
                                         notifyDataSetChanged()
                                         Toast.makeText(v.context, "you editing the data", Toast.LENGTH_LONG).show()
                                         dialog.dismiss()
@@ -107,6 +118,7 @@ class UserAdapter(val c:Context,val userList:MutableList<UserData>):RecyclerView
                             .setPositiveButton("Yes"){
                                     dialog,_ ->
                                 userList.removeAt(adapterPosition)
+                                maiVM.deleteTask(position)
                                 notifyDataSetChanged()
                                 Toast.makeText(c,"you deleted a List", Toast.LENGTH_LONG).show()
                                 dialog.dismiss()
@@ -139,10 +151,10 @@ class UserAdapter(val c:Context,val userList:MutableList<UserData>):RecyclerView
 
     override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
         val newList = userList[position]
-        holder.title.text = newList.txtTitle
-        holder.date.text = newList.txtDate
-        holder.creationDate.text = newList.creatDate
-        holder.mDescribe.text = newList.txtDescribe
+        holder.title.text = newList.taskTitle
+        holder.date.text = newList.taskDate
+        holder.creationDate.text = newList.taskCreatDate
+        holder.mDescribe.text = newList.taskDescribe
     }
 
     override fun getItemCount(): Int {

@@ -17,7 +17,6 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.math.min
 
 class MainActivity : AppCompatActivity(){
     private lateinit var addBtn:FloatingActionButton
@@ -46,7 +45,6 @@ class MainActivity : AppCompatActivity(){
 
         //set recycle view adapter
         recv.layoutManager = LinearLayoutManager(this)
-        // recv.adapter = userAdapter
 
 
         //set Dialog
@@ -55,7 +53,7 @@ class MainActivity : AppCompatActivity(){
 
     private fun loadScreen() {
         mainVM.getAllUsers().observe(this, {
-            recv.adapter = UserAdapter(this, it as MutableList<UserData>)
+            recv.adapter = UserAdapter(this, it as MutableList<UserData>,mainVM)
         })
     }
 
@@ -105,10 +103,10 @@ class MainActivity : AppCompatActivity(){
             val date = enterDate.text.toString()
             val discr = enterDescription.text.toString()
             val create = creationDate.text.toString()
+
             if (title.isNotBlank()) {
-                //userList.add(UserData(txtTitle = title,txtDate= date,txtDescribe = discr,creatDate = create))
-                //userAdapter.notifyDataSetChanged()
-                val addTask =UserData(txtTitle = title,txtDate= date,txtDescribe = discr,creatDate = create)
+
+                val addTask =UserData(taskTitle = title,taskDate= date,taskDescribe = discr,taskCreatDate = create)
                 mainVM.insertTask(addTask)
                 loadScreen()
                     Toast.makeText(this, "Adding success", Toast.LENGTH_SHORT).show()
@@ -116,9 +114,6 @@ class MainActivity : AppCompatActivity(){
             } else {
                 Toast.makeText(this, "Must add title", Toast.LENGTH_SHORT).show()
             }
-
-
-
         }
         addDialog.setNegativeButton("Cancel") { dialog, _ ->
             dialog.dismiss()

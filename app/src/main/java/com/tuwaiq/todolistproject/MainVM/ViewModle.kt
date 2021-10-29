@@ -29,4 +29,12 @@ class ViewModle(context: Application) : AndroidViewModel(context) {
         repo.insertTask(userData)
     }
 
+
+    fun deleteTask(userData: UserData) = viewModelScope.launch {
+        repo.deleteTask(userData)
+    }
+    fun updateTask(userData: UserData)= viewModelScope.launch {
+        repo.updateTask(userData)
+    }
+
 }

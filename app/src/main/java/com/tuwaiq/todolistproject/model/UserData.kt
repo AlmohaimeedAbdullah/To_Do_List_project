@@ -7,8 +7,8 @@ import androidx.room.PrimaryKey
 data class UserData (
     @PrimaryKey(autoGenerate = true)
     var id:Int = 0,
-    var txtTitle :String,
-    var txtDate :String,
-    var txtDescribe: String,
-    var creatDate:String
+    var taskTitle :String,
+    var taskDate :String,
+    var taskDescribe: String,
+    var taskCreatDate:String
         )
