@@ -23,4 +23,4 @@ for me and here I finished my project and I am proud of it.
 ## :camera_flash: Screenshots
 ---
 ### screenshot_1
-<img src="https://user-images.githubusercontent.com/91476854/139543397-c02c119d-f788-4986-890e-5c59c664397d.png" width="260">
+<img src="https://user-images.githubusercontent.com/91476854/139543763-f9a429a6-53d6-4034-8ad0-0f2f69810b0d.png" width="260">
