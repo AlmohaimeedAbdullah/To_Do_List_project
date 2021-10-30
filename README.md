@@ -24,3 +24,7 @@ for me and here I finished my project and I am proud of it.
 ---
 ### screenshot_1
 <img src="https://user-images.githubusercontent.com/91476854/139543763-f9a429a6-53d6-4034-8ad0-0f2f69810b0d.png" width="260">
+### screenshot_2
+<img src="https://user-images.githubusercontent.com/91476854/139553652-a47f6823-c769-4533-a8f9-cc61e3dff4c3.png" width="260">
+### screenshot_3
+<img src="https://user-images.githubusercontent.com/91476854/139553761-ad01ec3a-3377-4011-96d9-080a762b2601.png" width="260">
