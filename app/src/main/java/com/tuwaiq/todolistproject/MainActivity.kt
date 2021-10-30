@@ -86,7 +86,7 @@ class MainActivity : AppCompatActivity(){
         enterDate.setOnClickListener {
             val datePickerDialog = DatePickerDialog(
                 this, DatePickerDialog.OnDateSetListener { view, y, m, d ->
-                    date = "$y/$m/$d"
+                    date = "$y-${m+1}-$d"
                     enterDate.setText(date)
                 },
                 year, month, day
@@ -122,8 +122,5 @@ class MainActivity : AppCompatActivity(){
         addDialog.create()
         addDialog.show()
     }
-/*    fun titleIsNitBlank():UserData{
 
-        return userTask
-    }*/
 }

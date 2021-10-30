@@ -3,6 +3,7 @@ package com.tuwaiq.todolistproject.view
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.content.Context
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,9 +23,11 @@ class UserAdapter(val c:Context,val userList:MutableList<UserData>,
 
 
 
+
     inner class UserViewHolder(v: View):RecyclerView.ViewHolder(v){
 
 
+        var itemIdXML:LinearLayout = v.findViewById(R.id.itemIdXML)
         var title: TextView
         var date: TextView
         var mMenu:ImageView
@@ -58,12 +61,10 @@ class UserAdapter(val c:Context,val userList:MutableList<UserData>,
 
                 //current day
                 val current = LocalDateTime.now()
-                val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+                val formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd")
                 val formatted = current.format(formatter)
                 when (it.itemId) {
 
-
-                    //if(>=){
                     //set edit
                     R.id.editText ->{
 
@@ -75,7 +76,7 @@ class UserAdapter(val c:Context,val userList:MutableList<UserData>,
                         enterDate.setOnClickListener{
                             val datePickerDialog = DatePickerDialog(v.context,DatePickerDialog.OnDateSetListener{
                                     view, y, m, d ->
-                                date = "$y/$m/$d"
+                                date = "$y-${m+1}-$d"
                                 enterDate.setText(date) },
                                 year,month,day)
                             datePickerDialog.datePicker.minDate = c.timeInMillis
@@ -155,6 +156,24 @@ class UserAdapter(val c:Context,val userList:MutableList<UserData>,
         holder.date.text = newList.taskDate
         holder.creationDate.text = newList.taskCreatDate
         holder.mDescribe.text = newList.taskDescribe
+
+        // Date
+        val current = LocalDateTime.now()
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        val formatted = current.format(formatter)
+
+        if (newList.taskDate < formatted){
+            holder.itemIdXML.setBackgroundColor(Color.RED)
+
+            holder.itemIdXML.isEnabled = false
+
+        }else if(newList.taskDate == formatted){
+
+            holder.itemIdXML.setBackgroundColor(Color.GREEN)
+        }else{
+            holder.itemIdXML.setBackgroundColor(Color.WHITE)
+
+        }
     }
 
     override fun getItemCount(): Int {

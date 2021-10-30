@@ -8,7 +8,12 @@
     app:cardMaxElevation="5dp"
     android:layout_margin="10dp">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/black">
         <LinearLayout
+            android:id="@+id/itemIdXML"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
@@ -34,6 +39,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Creation date"
+                    android:textColor="@color/black"
                     android:padding="3dp"
                     android:layout_margin="5dp"
                     android:layout_gravity="bottom"/>
@@ -100,7 +106,7 @@
                 android:layout_height="40dp"/>
 
     </LinearLayout>
-
+    </LinearLayout>
 
 
 
