@@ -61,7 +61,7 @@ class UserAdapter(val c:Context,val userList:MutableList<UserData>,
 
                 //current day
                 val current = LocalDateTime.now()
-                val formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd")
+                val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
                 val formatted = current.format(formatter)
                 when (it.itemId) {
 
@@ -159,7 +159,7 @@ class UserAdapter(val c:Context,val userList:MutableList<UserData>,
 
         // Date
         val current = LocalDateTime.now()
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-d")
         val formatted = current.format(formatter)
 
         if (newList.taskDate < formatted){
@@ -171,7 +171,7 @@ class UserAdapter(val c:Context,val userList:MutableList<UserData>,
 
             holder.itemIdXML.setBackgroundColor(Color.GREEN)
         }else{
-            holder.itemIdXML.setBackgroundColor(Color.WHITE)
+            holder.itemIdXML.setBackgroundColor(Color.BLACK)
 
         }
     }
